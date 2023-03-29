@@ -17,13 +17,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
     //* Here we have access to the context of the app.
-    PushNotificationService.messageStream.listen((message) {
-      print('MyApp: $message');
-      // Navigator.pushNamed(context, 'second');
+    PushNotificationService.messageStream.listen((product) {
+      print('MyApp: $product');
+
+      navigatorKey.currentState?.pushNamed('/message', arguments: product);
+      messengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text(product),
+          // action: SnackBarAction(
+          //   label: 'Go',
+          //   onPressed: () => navigatorKey.currentState!.pushNamed('/message'),
+          // ),
+        ),
+      );
     });
   }
 
@@ -32,10 +46,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      initialRoute: '/',
+      initialRoute: '/home',
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: messengerKey,
       routes: {
-        '/': (_) => const HomeScreen(),
-        '/second': (_) => const MessageScreen(),
+        '/home': (_) => const HomeScreen(),
+        '/message': (_) => const MessageScreen(),
       },
     );
   }
