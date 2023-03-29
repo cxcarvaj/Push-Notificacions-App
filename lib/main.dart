@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:notifications_app/screens/screens.dart';
+import 'package:notifications_app/services/push_notifications_service.dart';
 
-void main() {
+void main() async {
+  // This is to ensure that the app is initialized before running the app
+  WidgetsFlutterBinding.ensureInitialized();
+  await PushNotificationService.initializeApp();
   runApp(const MyApp());
 }
 
